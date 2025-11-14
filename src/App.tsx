@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import * as api from './api/candidates'
 import { CandidateTable } from './components/candidate-table'
+import { DocumentRequestModal } from './components/document-request-modal'
 import { FileUpload } from './components/file-upload'
 
 function App() {
@@ -20,6 +21,10 @@ function App() {
   // Document upload form
   const [panCard, setPanCard] = useState<File | null>(null)
   const [aadharCard, setAadharCard] = useState<File | null>(null)
+  
+  // Modal state
+  const [showModal, setShowModal] = useState(false)
+  const [requestMessage, setRequestMessage] = useState('')
 
   // Load candidates on mount
   useEffect(() => {
@@ -81,16 +86,33 @@ function App() {
     if (!selectedId) return
     
     setError(null)
-    setSuccess(null)
+    setRequestMessage('')
+    setShowModal(true)
     setLoading(prev => ({ ...prev, action: true }))
+    
     try {
       const response = await api.requestDocuments(selectedId)
-      setSuccess(response.message || 'Document request sent!')
+      setRequestMessage(response.message)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Request failed')
+      setError(err instanceof Error ? err.message : 'Failed to generate request')
+      setShowModal(false)
     } finally {
       setLoading(prev => ({ ...prev, action: false }))
     }
+  }
+
+  function handleSendRequest(editedMessage: string) {
+    // TODO: Implement actual send mail API when backend is ready
+    // The editedMessage contains the HR's final version
+    console.log('Sending email with message:', editedMessage)
+    setSuccess('Document request sent successfully!')
+    setShowModal(false)
+    setRequestMessage('')
+  }
+
+  function handleCloseModal() {
+    setShowModal(false)
+    setRequestMessage('')
   }
 
   async function handleDocumentSubmit(e: React.FormEvent) {
@@ -141,15 +163,24 @@ function App() {
   const documents = selectedCandidate?.documents || []
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <div>
-          <h1>AutoParse Dashboard</h1>
-        </div>
-        <div className="app-header-actions">
-          <span className="app-badge">{candidates.length} candidates</span>
-        </div>
-      </header>
+    <>
+      <DocumentRequestModal
+        isOpen={showModal}
+        message={requestMessage}
+        loading={loading.action}
+        onClose={handleCloseModal}
+        onSend={handleSendRequest}
+      />
+      
+      <div className="app-container">
+        <header className="app-header">
+          <div>
+            <h1>AutoParse Dashboard</h1>
+          </div>
+          <div className="app-header-actions">
+            <span className="app-badge">{candidates.length} candidates</span>
+          </div>
+        </header>
 
       <section className="app-section">
         <div className="section-header">
@@ -323,7 +354,8 @@ function App() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   )
 }
 
