@@ -1,0 +1,121 @@
+@keyframes file-upload-pulse {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.file-upload-dropzone {
+  margin-bottom: 2rem;
+  padding: 3rem;
+  text-align: center;
+  border: 2px dashed #d1d5db;
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.file-upload-dropzone.drag-active {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  box-shadow: 0 18px 40px rgba(59, 130, 246, 0.15);
+}
+
+.file-upload-dropzone.uploading {
+  cursor: progress;
+}
+
+.file-upload-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+  display: block;
+  color: #9ca3af;
+  transition: color 0.3s ease;
+}
+
+.file-upload-dropzone.drag-active .file-upload-icon {
+  color: #3b82f6;
+}
+
+.file-upload-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.file-upload-subtitle {
+  margin-bottom: 1.5rem;
+  color: #6b7280;
+}
+
+.file-upload-progress-container {
+  max-width: 28rem;
+  margin: 0 auto 1.5rem;
+  animation: file-upload-pulse 1.6s ease-in-out infinite;
+}
+
+.file-upload-progress-bar {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 999px;
+  background-color: #e5e7eb;
+  overflow: hidden;
+}
+
+.file-upload-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.file-upload-progress-text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.file-upload-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  border: 1px solid gray
+}
+
+.file-upload-button:hover {
+  transform: translateY(-1px);
+}
+
+.file-upload-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+@media (max-width: 640px) {
+  .file-upload-dropzone {
+    padding: 2.25rem 1.75rem;
+  }
+
+  .file-upload-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+}
+
